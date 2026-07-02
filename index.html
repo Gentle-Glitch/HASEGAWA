@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>長谷川商事 — 하세가와 상사</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght=400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&display=swap');
 
 :root{
   --black:#0a0908;
@@ -48,7 +48,7 @@ img{ -webkit-user-drag:none; user-select:none; }
 @keyframes doorCreak{
   0%{ transform:rotateY(0deg) scale(1); filter:brightness(1); }
   30%{ transform:rotateY(-8deg) scale(1.01); }
-  100%{ transform:rotateY(-58deg) scale(1.05); filter:brightness(0.15); opacity:0; filter:brightness(0.15); opacity:0; }
+  100%{ transform:rotateY(-58deg) scale(1.05); filter:brightness(0.15); opacity:0; }
 }
 #screen-door.fading{ animation:screenFade 0.9s ease forwards; }
 @keyframes screenFade{ to{ opacity:0; } }
@@ -151,4 +151,191 @@ img{ -webkit-user-drag:none; user-select:none; }
 .profile-name-kr{ font-size:0.95rem; letter-spacing:0.15em; color:var(--khaki-dim); margin-bottom:20px; }
 .profile-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:22px; }
 .stat-box{ border-left:2px solid var(--red); padding-left:10px; }
-.stat-label{ font
+.stat-label{ font-size:0.65rem; letter-spacing:0.15em; color:var(--khaki-dim); margin-bottom:3px; }
+.stat-value{ font-size:1rem; font-weight:700; }
+.profile-bio-title{ font-size:0.8rem; letter-spacing:0.2em; font-weight:700; margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--kraft-line); }
+.profile-bio{ font-size:0.92rem; line-height:1.95; letter-spacing:0.01em; }
+.profile-bio p{ margin-bottom:14px; }
+.wax-seal{ position:absolute; top:clamp(16px,3vw,34px); right:clamp(16px,3vw,34px); width:64px; height:64px; border-radius:50%; background:radial-gradient(circle at 35% 30%, var(--red-bright), var(--red) 70%, #4a1a10); box-shadow:0 6px 14px rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; color:var(--kraft); font-weight:900; font-size:1rem; transform:rotate(-8deg); border:1px solid rgba(0,0,0,0.3); z-index:10; }
+.profile-footer-btn{ margin-top:26px; display:inline-block; background:none; border:1px solid var(--ink); color:var(--ink); padding:10px 22px; font-family:inherit; letter-spacing:0.2em; font-size:0.75rem; cursor:pointer; transition:background 0.25s ease, color 0.25s ease; }
+.profile-footer-btn:hover{ background:var(--ink); color:var(--kraft); }
+
+/* ================= [최종] 모바일 레이아웃 증발 및 터짐 긴급 수정 ================= */
+@media (max-width:640px){ 
+  #screen-profile { display:block !important; overflow-y:auto !important; }
+  
+  /* 모바일 강제 노출 및 애니메이션 좌표 깨짐 방지 */
+  .profile-doc { 
+    animation: unfoldDocMobile 0.5s ease-out forwards !important;
+    max-height: none !important; 
+    overflow-y: visible !important; 
+    padding: 35px 20px 40px !important; 
+    margin: 20px auto !important; 
+    width: 90vw !important; 
+  }
+  
+  @keyframes unfoldDocMobile {
+    0% { transform: scale(1) translateY(30px) rotate(0deg); opacity: 0; }
+    100% { transform: scale(1) translateY(0) rotate(0deg); opacity: 1; }
+  }
+
+  .profile-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .portrait-frame { max-width: 180px !important; margin: 0 auto !important; }
+  .profile-stats { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  
+  /* 도장 및 버튼 완전 고정 */
+  .wax-seal { width: 54px !important; height: 54px !important; font-size: 0.85rem !important; top: 12px !important; right: 12px !important; }
+  .profile-footer-btn { width: 100% !important; text-align: center !important; margin-top: 30px !important; padding: 14px 22px !important; display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<section class="screen active" id="screen-door">
+  <div class="door-wrap">
+    <div class="door-frame" id="doorFrame" role="button" tabindex="0" aria-label="하세가와 상사 문 열기">
+      <img src="하세가와 상사 찐.png" alt="長谷川商事 하세가와 상사 문">
+    </div>
+    <div class="door-hint">문을 두드려 안으로 — CLICK TO ENTER</div>
+  </div>
+</section>
+
+<section class="screen" id="screen-office">
+  <div class="office-viewport" id="officeViewport">
+    <div class="office-inner" id="officeInner">
+      <img src="하세가와 내부 찐.jpg" alt="하세가와 상사 사무실 내부">
+
+      <div class="spot" id="spot-cigar" data-target="cigar" role="button" tabindex="0" aria-label="타고 있는 시가" style="left:45.1%; top:65.8%;"></div>
+      <div class="spot" id="spot-plant" data-target="plant" role="button" tabindex="0" aria-label="붉은 꽈리 화분" style="left:90.8%; top:39%;"></div>
+      <div class="spot" id="spot-envelope" data-target="envelope" role="button" tabindex="0" aria-label="급여 봉투" style="left:75.5%; top:75%;"></div>
+      <div class="spot" id="spot-desk" data-target="desk" role="button" tabindex="0" aria-label="조직원들의 책상" style="left:24%; top:42%;"></div>
+      <div class="spot" id="spot-doc" data-target="doc" role="button" tabindex="0" aria-label="비밀 서류 — 최종 목적지" style="left:33.5%; top:55.5%;"></div>
+
+      <div class="office-vignette"></div>
+    </div>
+  </div>
+  <div class="swipe-hint">← 좌우로 스와이프하여 사무실 전체를 둘러보세요 →</div>
+</section>
+
+<section class="screen" id="screen-profile">
+  <article class="profile-doc" id="profileDoc">
+    <div class="wax-seal">秘</div>
+    <div class="profile-eyebrow">CONFIDENTIAL DOSSIER — 극비 서류</div>
+    <div class="profile-grid">
+      <div>
+        <div class="portrait-frame">
+          <img src="에이지.jpg" alt="하세가와 에이지 초상화" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        </div>
+        <div class="portrait-caption">HASEGAWA EIJI · 極秘資料</div>
+      </div>
+      <div>
+        <div class="profile-name-jp">長谷川 英治</div>
+        <div class="profile-name-kr">하세가와 에이지 (Hasegawa Eiji)</div>
+        <div class="profile-stats">
+          <div class="stat-box"><div class="stat-label">AGE · 연령</div><div class="stat-value">36세</div></div>
+          <div class="stat-box"><div class="stat-label">POSITION · 직책</div><div class="stat-value">오야붕 (組長)</div></div>
+          <div class="stat-box"><div class="stat-label">ORGANIZATION · 조직</div><div class="stat-value">하세가와 구미</div></div>
+        </div>
+        <div class="profile-bio-title">인물 개요 — PROFILE</div>
+        <div class="profile-bio">
+          <p>겁나 좋은 집안에서 태어난 천재. 과부화로 감정 셧다운 상태. 지금은 시가 연기 사이로 항구의 절반을 조용히 움켜쥐고 있다.</p>
+          <p>책상 위 붉은 꽈리 화분은 관상용이 아니다. 음 나도 잘 모르겠다. 전화기가 쉬지 않는 책상 너머, 그의 자리에는 언제나 조직의 다음 행보를 적은 서류가 놓여 있다.</p>
+          <p>웃고 있을 때도 눈빛에는 그 흔한 흥미나 온기조차 담겨있지 않다... 아직 설정 몬했다...</p>
+        </div>
+        <button class="profile-footer-btn" id="restartBtn">다시 문 앞으로 — RESTART</button>
+      </div>
+    </div>
+  </article>
+</section>
+
+<div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+  <div class="kraft-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="kraft-close" id="modalClose" aria-label="닫기">✕</button>
+    <div class="kraft-title" id="modalTitle"></div>
+    <div class="kraft-body" id="modalBody"></div>
+    <div class="kraft-stamp">秘匿</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const CLUES = {
+    cigar:   { title: "놋쇠 재떨이 위, 타고 있는 시가", body: "쿠바에서 나고야항을 통해 밀수된 최고급 시가. 연기가 아직 불온하게 피어오르고 있다." },
+    plant:   { title: "붉은 꽈리 화분", body: "붉은 불빛처럼 번지는 꽈리 화분. 아직 상세 설정은 못 정했다." },
+    envelope:{ title: "구석 창구 위, 급여 봉투", body: "이번 달 말단 조직원들에게 지급될 수당 봉투. 피와 땀, 그리고 누군가의 비명이 섞인 돈이다." },
+    desk:    { title: "조직원들이 일하는 어지러운 책상", body: "장부와 전화기, 깨진 찻잔이 널려 있는 책상. 방금 전까지 누군가 다급하게 전화를 돌린 흔적이 남아있다." }
+  };
+
+  const screenDoor    = document.getElementById('screen-door');
+  const screenOffice  = document.getElementById('screen-office');
+  const screenProfile = document.getElementById('screen-profile');
+  const doorFrame     = document.getElementById('doorFrame');
+  const officeViewport= document.getElementById('officeViewport');
+  const modalOverlay  = document.getElementById('modalOverlay');
+  const modalTitle    = document.getElementById('modalTitle');
+  const modalBody     = document.getElementById('modalBody');
+  const modalClose    = document.getElementById('modalClose');
+  const profileDoc    = document.getElementById('profileDoc');
+  const restartBtn    = document.getElementById('restartBtn');
+
+  function showScreen(el){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function openDoor(){
+    if(doorFrame.classList.contains('opening')) return;
+    doorFrame.classList.add('opening');
+    screenDoor.classList.add('fading');
+    setTimeout(() => {
+      showScreen(screenOffice);
+      screenDoor.classList.remove('fading');
+      doorFrame.classList.remove('opening');
+      officeViewport.scrollLeft = 0;
+    }, 850);
+  }
+  doorFrame.addEventListener('click', openDoor);
+  doorFrame.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') openDoor(); });
+
+  document.querySelectorAll('.spot').forEach(spot => {
+    const target = spot.dataset.target;
+    const activate = () => {
+      spot.classList.add('found');
+      if(target === 'doc'){ revealProfile(); }
+      else { openModal(CLUES[target]); }
+    };
+    spot.addEventListener('click', activate);
+    spot.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') activate(); });
+  });
+
+  function openModal(clue){
+    modalTitle.textContent = clue.title;
+    modalBody.textContent = clue.body;
+    modalOverlay.classList.add('active');
+    modalOverlay.setAttribute('aria-hidden', 'false');
+  }
+  function closeModal(){
+    modalOverlay.classList.remove('active');
+    modalOverlay.setAttribute('aria-hidden', 'true');
+  }
+  modalClose.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => { if(e.target === modalOverlay) closeModal(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+  function revealProfile(){
+    closeModal();
+    showScreen(screenProfile);
+    profileDoc.classList.remove('unfold');
+    void profileDoc.offsetWidth;
+    profileDoc.classList.add('unfold');
+  }
+
+  restartBtn.addEventListener('click', () => {
+    document.querySelectorAll('.spot').forEach(s => s.classList.remove('found'));
+    profileDoc.classList.remove('unfold');
+    showScreen(screenDoor);
+  });
+})();
+</script>
+</body>
+</html>
