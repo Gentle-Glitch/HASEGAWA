@@ -26,6 +26,7 @@ body{ width:100vw; height:100vh; position:relative; overflow:hidden; }
 ::selection{ background:var(--red); color:var(--kraft); }
 img{ -webkit-user-drag:none; user-select:none; }
 
+/* 기본 스크린 설정 (중앙 정렬) */
 .screen{ position:absolute; inset:0; width:100%; height:100%; display:none; align-items:center; justify-content:center; overflow:hidden; }
 .screen.active{ display:flex !important; }
 
@@ -161,14 +162,15 @@ img{ -webkit-user-drag:none; user-select:none; }
 .profile-footer-btn{ margin-top:26px; display:inline-block; background:none; border:1px solid var(--ink); color:var(--ink); padding:10px 22px; font-family:inherit; letter-spacing:0.2em; font-size:0.75rem; cursor:pointer; transition:background 0.25s ease, color 0.25s ease; }
 .profile-footer-btn:hover{ background:var(--ink); color:var(--kraft); }
 
-/* ================= [수정] 모바일 상단 짤림 방지 완벽 대책 ================= */
+/* ================= 모바일 레이아웃 반응형 (640px 이하) ================= */
 @media (max-width:640px){ 
+  /* 오직 프로필 화면 수직 정렬방식만 변경하여 상단 짤림 해결 (1·2단계는 영향 없음) */
   #screen-profile { 
     display: block !important;
-    align-items: flex-start !important; /* 상단 정렬로 강제 변환 */
+    align-items: flex-start !important; 
     justify-content: center !important;
     overflow-y: auto !important; 
-    padding: 40px 16px 60px !important; /* 위아래로 충분한 탈출 여백 확보 */
+    padding: 50px 16px 60px !important; 
   }
   
   .profile-doc { 
@@ -176,7 +178,7 @@ img{ -webkit-user-drag:none; user-select:none; }
     max-height: none !important; 
     overflow-y: visible !important; 
     padding: 35px 20px 40px !important; 
-    margin: 0 auto !important; /* 위아래 마진 제거하여 튕김 방지 */
+    margin: 0 auto !important; 
     width: 100% !important; 
     transform: none !important;
   }
