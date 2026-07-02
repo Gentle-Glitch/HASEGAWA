@@ -161,6 +161,44 @@ img{ -webkit-user-drag:none; user-select:none; }
 .wax-seal{ position:absolute; top:clamp(16px,3vw,34px); right:clamp(16px,3vw,34px); width:64px; height:64px; border-radius:50%; background:radial-gradient(circle at 35% 30%, var(--red-bright), var(--red) 70%, #4a1a10); box-shadow:0 6px 14px rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; color:var(--kraft); font-weight:900; font-size:1rem; transform:rotate(-8deg); border:1px solid rgba(0,0,0,0.3); }
 .profile-footer-btn{ margin-top:26px; display:inline-block; background:none; border:1px solid var(--ink); color:var(--ink); padding:10px 22px; font-family:inherit; letter-spacing:0.2em; font-size:0.75rem; cursor:pointer; transition:background 0.25s ease, color 0.25s ease; }
 .profile-footer-btn:hover{ background:var(--ink); color:var(--kraft); }
+  /* 1. 이미지 액자틀: 모바일에서 꽉 차거나 밀리지 않도록 최대 너비 제한 */
+.portrait-frame { 
+  position: relative; 
+  border: 1px solid var(--kraft-line); 
+  padding: 6px; 
+  background: rgba(0,0,0,0.04); 
+  width: 100%;
+  max-width: 220px; /* 컴퓨터 크기 기준 최대 너비 고정 */
+  margin: 0 auto;   /* 모바일로 전환 시 중앙 정렬 */
+  aspect-ratio: 220 / 300; 
+}
+
+/* 2. 전체 그리드: 요소 간의 여백을 모바일 환경에 맞춰 유연하게 조절 */
+.profile-grid { 
+  display: grid; 
+  grid-template-columns: 220px 1fr; 
+  gap: clamp(16px, 4vw, 44px); 
+  align-items: start; 
+}
+
+/* 3. 모바일 화면(640px 이하) 대응 브레이크포인트 수정 */
+@media (max-width: 640px) { 
+  .profile-grid { 
+    grid-template-columns: 1fr; /* 세로로 1열 정렬 */
+    gap: 24px;                  /* 이미지와 텍스트 사이 밀림 방지 적정 여백 */
+  }
+  
+  /* 모바일에서 프로필 전체 서류 패딩을 줄여 공간 확보 */
+  .profile-doc {
+    padding: 20px 16px !important;
+  }
+
+  /* 모바일에서 3열 스탯 창이 밖으로 터져 나가지 않도록 1fr 1fr 구조로 유연화 */
+  .profile-stats {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
 </style>
 </head>
 <body>
