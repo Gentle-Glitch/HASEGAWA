@@ -128,7 +128,7 @@ img{ -webkit-user-drag:none; user-select:none; }
 .kraft-stamp{ position:absolute; bottom:14px; right:18px; width:52px; height:52px; border-radius:50%; border:2px solid var(--red); color:var(--red); display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:900; letter-spacing:0.05em; transform:rotate(-14deg); opacity:0.75; }
 
 /* ================= SCREEN 3 : PROFILE ================= */
-#screen-profile{ background:radial-gradient(ellipse at 50% 0%, rgba(160,60,40,0.10), transparent 55%), linear-gradient(180deg,#0d0b09 0%, #050403 100%); padding:24px; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-top: 50px; /* 1. 상단 짤림 방지용 고정 여백 추가 */ }
+#screen-profile{ background:radial-gradient(ellipse at 50% 0%, rgba(160,60,40,0.10), transparent 55%), linear-gradient(180deg,#0d0b09 0%, #050403 100%); padding:24px; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-top: 40px; }
 .profile-doc{
   position:relative; width:min(94vw, 940px); max-height:92vh; overflow-y:auto;
   background:radial-gradient(circle at 10% 5%, rgba(0,0,0,0.05), transparent 40%), linear-gradient(165deg, var(--kraft), var(--kraft-shadow) 90%);
@@ -161,23 +161,29 @@ img{ -webkit-user-drag:none; user-select:none; }
 .profile-footer-btn{ margin-top:26px; display:inline-block; background:none; border:1px solid var(--ink); color:var(--ink); padding:10px 22px; font-family:inherit; letter-spacing:0.2em; font-size:0.75rem; cursor:pointer; transition:background 0.25s ease, color 0.25s ease; }
 .profile-footer-btn:hover{ background:var(--ink); color:var(--kraft); }
 
-/* ================= 모바일 레이아웃 반응형 (640px 이하) ================= */
+/* ================= [수정] 모바일 상단 짤림 방지 완벽 대책 ================= */
 @media (max-width:640px){ 
-  #screen-profile { overflow-y:auto !important; padding-top: 60px !important; /* 2. 모바일 상단 짤림 긴급 보정 (더 넓은 여백) */ }
+  #screen-profile { 
+    display: block !important;
+    align-items: flex-start !important; /* 상단 정렬로 강제 변환 */
+    justify-content: center !important;
+    overflow-y: auto !important; 
+    padding: 40px 16px 60px !important; /* 위아래로 충분한 탈출 여백 확보 */
+  }
   
   .profile-doc { 
-    animation: unfoldDocMobile 0.5s ease-out forwards !important;
+    animation: unfoldDocMobile 0.4s ease-out forwards !important;
     max-height: none !important; 
     overflow-y: visible !important; 
     padding: 35px 20px 40px !important; 
-    margin: 20px auto !important; 
-    width: 90vw !important; 
+    margin: 0 auto !important; /* 위아래 마진 제거하여 튕김 방지 */
+    width: 100% !important; 
+    transform: none !important;
   }
   
-  /* 3. 애니메이션 시작 좌표를 아래로 대폭 수정 (상단 영역에서 노출 차단) */
   @keyframes unfoldDocMobile {
-    0% { transform: scale(1) translateY(100px) rotate(0deg); opacity: 0; }
-    100% { transform: scale(1) translateY(0) rotate(0deg); opacity: 1; }
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
   }
 
   .profile-eyebrow br { display: block !important; margin-bottom: 4px; }
