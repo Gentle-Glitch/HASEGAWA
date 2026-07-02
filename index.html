@@ -26,7 +26,7 @@ body{ width:100vw; height:100vh; position:relative; overflow:hidden; }
 ::selection{ background:var(--red); color:var(--kraft); }
 img{ -webkit-user-drag:none; user-select:none; }
 
-/* 기본 스크린 설정 (중앙 정렬) */
+/* [중요] 기본 스크린 설정 - 무조건 숨김 상태가 기본이며 active가 붙어야만 뜹니다 */
 .screen{ position:absolute; inset:0; width:100%; height:100%; display:none; align-items:center; justify-content:center; overflow:hidden; }
 .screen.active{ display:flex !important; }
 
@@ -164,9 +164,12 @@ img{ -webkit-user-drag:none; user-select:none; }
 
 /* ================= 모바일 레이아웃 반응형 (640px 이하) ================= */
 @media (max-width:640px){ 
-  /* 오직 프로필 화면 수직 정렬방식만 변경하여 상단 짤림 해결 (1·2단계는 영향 없음) */
-  #screen-profile { 
-    display: block !important;
+  /* [수정] 전체 .screen이 아니라, 오직 최종 프로필 스크린(#screen-profile)의 정렬 방식만 변경합니다. 다른 화면은 영향을 받지 않습니다. */
+  body #screen-profile { 
+    display: none !important; /* 기본적으론 숨김 */
+  }
+  body #screen-profile.active { 
+    display: block !important; /* 활성화될 때만 block으로 띄워 상단 짤림 현상 방지 */
     align-items: flex-start !important; 
     justify-content: center !important;
     overflow-y: auto !important; 
@@ -206,6 +209,7 @@ img{ -webkit-user-drag:none; user-select:none; }
 </head>
 <body>
 
+<!-- ============ SCREEN 1: DOOR (첫 화면으로 자동 활성화) ============ -->
 <section class="screen active" id="screen-door">
   <div class="door-wrap">
     <div class="door-frame" id="doorFrame" role="button" tabindex="0" aria-label="하세가와 상사 문 열기">
@@ -215,16 +219,22 @@ img{ -webkit-user-drag:none; user-select:none; }
   </div>
 </section>
 
+<!-- ============ SCREEN 2: OFFICE ============ -->
 <section class="screen" id="screen-office">
   <div class="office-viewport" id="officeViewport">
     <div class="office-inner" id="officeInner">
       <img src="하세가와 내부 찐.jpg" alt="하세가와 상사 사무실 내부">
 
+      <!-- Spot 1: cigar / ashtray -->
       <div class="spot" id="spot-cigar" data-target="cigar" role="button" tabindex="0" aria-label="타고 있는 시가" style="left:45.1%; top:65.8%;"></div>
+      <!-- Spot 2: plant -->
       <div class="spot" id="spot-plant" data-target="plant" role="button" tabindex="0" aria-label="붉은 꽈리 화분" style="left:90.8%; top:39%;"></div>
+      <!-- Spot 3: envelope -->
       <div class="spot" id="spot-envelope" data-target="envelope" role="button" tabindex="0" aria-label="급여 봉투" style="left:75.5%; top:75%;"></div>
+      <!-- Spot 4: messy desk -->
       <div class="spot" id="spot-desk" data-target="desk" role="button" tabindex="0" aria-label="조직원들의 책상" style="left:24%; top:42%;"></div>
-      <div class="spot" id="spot-doc" data-target="doc" role="button" tabindex="0" aria-label="비밀 서류 — 최종 목적지" style="left:33.5%; top:55.5%;"></div>
+      <!-- Spot 5: secret document (이걸 찾아 눌러야 프로필로 이동) -->
+      <div class="spot" id="spot-doc" data-target="doc" role="button" tabindex="0" aria-label="비밀 서류" style="left:33.5%; top:55.5%;"></div>
 
       <div class="office-vignette"></div>
     </div>
@@ -232,6 +242,7 @@ img{ -webkit-user-drag:none; user-select:none; }
   <div class="swipe-hint">← 좌우로 스와이프하여 사무실 전체를 둘러보세요 →</div>
 </section>
 
+<!-- ============ SCREEN 3: PROFILE ============ -->
 <section class="screen" id="screen-profile">
   <article class="profile-doc" id="profileDoc">
     <div class="wax-seal">秘</div>
@@ -263,6 +274,7 @@ img{ -webkit-user-drag:none; user-select:none; }
   </article>
 </section>
 
+<!-- ============ MODAL ============ -->
 <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
   <div class="kraft-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <button class="kraft-close" id="modalClose" aria-label="닫기">✕</button>
@@ -293,17 +305,19 @@ img{ -webkit-user-drag:none; user-select:none; }
   const profileDoc    = document.getElementById('profileDoc');
   const restartBtn    = document.getElementById('restartBtn');
 
+  // 화면 전환 함수
   function showScreen(el){
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     el.classList.add('active');
   }
 
+  // 1단계: 문 열기 로직
   function openDoor(){
     if(doorFrame.classList.contains('opening')) return;
     doorFrame.classList.add('opening');
     screenDoor.classList.add('fading');
     setTimeout(() => {
-      showScreen(screenOffice);
+      showScreen(screenOffice); // 2단계 사무실로 이동
       screenDoor.classList.remove('fading');
       doorFrame.classList.remove('opening');
       officeViewport.scrollLeft = 0;
@@ -312,17 +326,19 @@ img{ -webkit-user-drag:none; user-select:none; }
   doorFrame.addEventListener('click', openDoor);
   doorFrame.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') openDoor(); });
 
+  // 2단계: 사무실 내부 탐색 로직
   document.querySelectorAll('.spot').forEach(spot => {
     const target = spot.dataset.target;
     const activate = () => {
       spot.classList.add('found');
-      if(target === 'doc'){ revealProfile(); }
+      if(target === 'doc'){ revealProfile(); } // 서류 찾으면 3단계 프로필로 이동
       else { openModal(CLUES[target]); }
     };
     spot.addEventListener('click', activate);
     spot.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') activate(); });
   });
 
+  // 단서 팝업창 모달
   function openModal(clue){
     modalTitle.textContent = clue.title;
     modalBody.textContent = clue.body;
@@ -337,18 +353,20 @@ img{ -webkit-user-drag:none; user-select:none; }
   modalOverlay.addEventListener('click', e => { if(e.target === modalOverlay) closeModal(); });
   document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
 
+  // 3단계: 프로필 노출 로직
   function revealProfile(){
     closeModal();
     showScreen(screenProfile);
     profileDoc.classList.remove('unfold');
-    void profileDoc.offsetWidth;
+    void profileDoc.offsetWidth; // 리플로우 강제 유도하여 애니메이션 초기화
     profileDoc.classList.add('unfold');
   }
 
+  // 리스타트 버튼
   restartBtn.addEventListener('click', () => {
     document.querySelectorAll('.spot').forEach(s => s.classList.remove('found'));
     profileDoc.classList.remove('unfold');
-    showScreen(screenDoor);
+    showScreen(screenDoor); // 다시 1단계 문으로 리셋
   });
 })();
 </script>
