@@ -27,7 +27,7 @@ body{ width:100vw; height:100vh; position:relative; overflow:hidden; }
 img{ -webkit-user-drag:none; user-select:none; }
 
 .screen{ position:absolute; inset:0; width:100%; height:100%; display:none; align-items:center; justify-content:center; overflow:hidden; }
-.screen.active{ display:flex; }
+.screen.active{ display:flex !important; } /* active 상태일 때만 보이도록 강제 지정 */
 
 /* ================= SCREEN 1 : DOOR ================= */
 #screen-door{ background:radial-gradient(ellipse at 50% 35%, rgba(90,100,80,0.08), transparent 60%), linear-gradient(180deg,#0c0b09 0%, #040403 100%); }
@@ -143,6 +143,7 @@ img{ -webkit-user-drag:none; user-select:none; }
 .profile-doc::-webkit-scrollbar{ width:8px; }
 .profile-doc::-webkit-scrollbar-thumb{ background:var(--kraft-line); border-radius:8px; }
 .profile-eyebrow{ font-size:0.72rem; letter-spacing:0.35em; color:var(--red); margin-bottom:6px; font-weight:700; }
+.profile-eyebrow br { display: none; } /* PC에서는 줄바꿈 금지 */
 
 .profile-grid{ display:grid; grid-template-columns:220px 1fr; gap:clamp(20px,4vw,44px); align-items:start; }
 .portrait-frame{ position:relative; border:1px solid var(--kraft-line); padding:6px; background:rgba(0,0,0,0.04); width:100%; aspect-ratio:220/300; }
@@ -160,11 +161,11 @@ img{ -webkit-user-drag:none; user-select:none; }
 .profile-footer-btn{ margin-top:26px; display:inline-block; background:none; border:1px solid var(--ink); color:var(--ink); padding:10px 22px; font-family:inherit; letter-spacing:0.2em; font-size:0.75rem; cursor:pointer; transition:background 0.25s ease, color 0.25s ease; }
 .profile-footer-btn:hover{ background:var(--ink); color:var(--kraft); }
 
-/* ================= [최종] 모바일 레이아웃 증발 및 터짐 긴급 수정 ================= */
+/* ================= 모바일 레이아웃 반응형 (640px 이하) ================= */
 @media (max-width:640px){ 
-  #screen-profile { display:block !important; overflow-y:auto !important; }
+  #screen-profile { overflow-y:auto !important; }
   
-  /* 모바일 강제 노출 및 애니메이션 좌표 깨짐 방지 */
+  /* 모바일 서류 애니메이션 튀는 현상 제거 및 정상 배치 */
   .profile-doc { 
     animation: unfoldDocMobile 0.5s ease-out forwards !important;
     max-height: none !important; 
@@ -179,11 +180,21 @@ img{ -webkit-user-drag:none; user-select:none; }
     100% { transform: scale(1) translateY(0) rotate(0deg); opacity: 1; }
   }
 
+  /* 모바일 한정 극비 서류 타이틀 줄바꿈 처리 */
+  .profile-eyebrow br { display: block !important; margin-bottom: 4px; }
+
   .profile-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
-  .portrait-frame { max-width: 180px !important; margin: 0 auto !important; }
+  
+  /* 모바일에서 사진 액자 비율(220x300) 안 깨지도록 고정 */
+  .portrait-frame { 
+    width: 180px !important; 
+    height: 245px !important; 
+    aspect-ratio: 220/300 !important; 
+    margin: 0 auto !important; 
+  }
+  
   .profile-stats { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
   
-  /* 도장 및 버튼 완전 고정 */
   .wax-seal { width: 54px !important; height: 54px !important; font-size: 0.85rem !important; top: 12px !important; right: 12px !important; }
   .profile-footer-btn { width: 100% !important; text-align: center !important; margin-top: 30px !important; padding: 14px 22px !important; display: block !important; }
 }
@@ -191,6 +202,7 @@ img{ -webkit-user-drag:none; user-select:none; }
 </head>
 <body>
 
+<!-- ============ SCREEN 1: DOOR ============ -->
 <section class="screen active" id="screen-door">
   <div class="door-wrap">
     <div class="door-frame" id="doorFrame" role="button" tabindex="0" aria-label="하세가와 상사 문 열기">
@@ -200,15 +212,21 @@ img{ -webkit-user-drag:none; user-select:none; }
   </div>
 </section>
 
+<!-- ============ SCREEN 2: OFFICE ============ -->
 <section class="screen" id="screen-office">
   <div class="office-viewport" id="officeViewport">
     <div class="office-inner" id="officeInner">
       <img src="하세가와 내부 찐.jpg" alt="하세가와 상사 사무실 내부">
 
+      <!-- Spot 1: cigar / ashtray -->
       <div class="spot" id="spot-cigar" data-target="cigar" role="button" tabindex="0" aria-label="타고 있는 시가" style="left:45.1%; top:65.8%;"></div>
+      <!-- Spot 2: plant -->
       <div class="spot" id="spot-plant" data-target="plant" role="button" tabindex="0" aria-label="붉은 꽈리 화분" style="left:90.8%; top:39%;"></div>
+      <!-- Spot 3: envelope -->
       <div class="spot" id="spot-envelope" data-target="envelope" role="button" tabindex="0" aria-label="급여 봉투" style="left:75.5%; top:75%;"></div>
+      <!-- Spot 4: messy desk -->
       <div class="spot" id="spot-desk" data-target="desk" role="button" tabindex="0" aria-label="조직원들의 책상" style="left:24%; top:42%;"></div>
+      <!-- Spot 5: secret document -->
       <div class="spot" id="spot-doc" data-target="doc" role="button" tabindex="0" aria-label="비밀 서류 — 최종 목적지" style="left:33.5%; top:55.5%;"></div>
 
       <div class="office-vignette"></div>
@@ -217,10 +235,12 @@ img{ -webkit-user-drag:none; user-select:none; }
   <div class="swipe-hint">← 좌우로 스와이프하여 사무실 전체를 둘러보세요 →</div>
 </section>
 
+<!-- ============ SCREEN 3: PROFILE ============ -->
 <section class="screen" id="screen-profile">
   <article class="profile-doc" id="profileDoc">
     <div class="wax-seal">秘</div>
-    <div class="profile-eyebrow">CONFIDENTIAL DOSSIER — 극비 서류</div>
+    <!-- 모바일에서만 줄바꿈되도록 br 태그 추가 -->
+    <div class="profile-eyebrow">CONFIDENTIAL DOSSIER <br>— 극비 서류</div>
     <div class="profile-grid">
       <div>
         <div class="portrait-frame">
@@ -248,6 +268,7 @@ img{ -webkit-user-drag:none; user-select:none; }
   </article>
 </section>
 
+<!-- ============ MODAL ============ -->
 <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
   <div class="kraft-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <button class="kraft-close" id="modalClose" aria-label="닫기">✕</button>
