@@ -161,8 +161,7 @@ img{ -webkit-user-drag:none; user-select:none; }
 .profile-footer-btn{ margin-top:26px; display:inline-block; background:none; border:1px solid var(--ink); color:var(--ink); padding:10px 22px; font-family:inherit; letter-spacing:0.2em; font-size:0.75rem; cursor:pointer; transition:background 0.25s ease, color 0.25s ease; }
 .profile-footer-btn:hover{ background:var(--ink); color:var(--kraft); }
 
-/* ================= 모바일 레이아웃 반응형 (640px 이하) ================= */
-@media (max-width:640px){ 
+@media (max-width:640px){
   body #screen-profile { 
     display: none !important; 
   }
@@ -297,7 +296,7 @@ img{ -webkit-user-drag:none; user-select:none; }
   const profileDoc    = document.getElementById('profileDoc');
   const restartBtn    = document.getElementById('restartBtn');
 
-  // 오디오 엘리먼트 가져오기
+ 
   const sndCreak = document.getElementById('sndCreak');
   const sndBgm = document.getElementById('sndBgm');
 
@@ -306,13 +305,13 @@ img{ -webkit-user-drag:none; user-select:none; }
     el.classList.add('active');
   }
 
-  // [수정] 문 열 때 효과음과 BGM 연계 로직
+  
   function openDoor(){
     if(doorFrame.classList.contains('opening')) return;
     doorFrame.classList.add('opening');
     screenDoor.classList.add('fading');
     
-    // 1. 클릭하자마자 '끼익-' 효과음 발사
+   
     sndCreak.play().catch(e => console.log("오디오 재생 차단 우회용:", e));
 
     setTimeout(() => {
@@ -321,7 +320,6 @@ img{ -webkit-user-drag:none; user-select:none; }
       doorFrame.classList.remove('opening');
       officeViewport.scrollLeft = 0;
       
-      // 2. 사무실 화면으로 완전히 전환되는 타이밍(850ms 뒤)에 은은한 메인 BGM 스타트
       sndBgm.play().catch(e => console.log(e));
     }, 850);
   }
@@ -361,12 +359,11 @@ img{ -webkit-user-drag:none; user-select:none; }
     profileDoc.classList.add('unfold');
   }
 
-  // 리스타트 시 음악도 처음부터 다시 리셋
   restartBtn.addEventListener('click', () => {
     document.querySelectorAll('.spot').forEach(s => s.classList.remove('found'));
     profileDoc.classList.remove('unfold');
     sndBgm.pause();
-    sndBgm.currentTime = 0; // 음악 초기화
+    sndBgm.currentTime = 0;
     showScreen(screenDoor);
   });
 })();
