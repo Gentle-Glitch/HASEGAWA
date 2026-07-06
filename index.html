@@ -147,6 +147,7 @@ img{ -webkit-user-drag:none; user-select:none; }
 
 .yinyang-wrap{ display:flex; justify-content:center; margin-bottom:10px; }
 .yinyang{
+  fill: none;
   filter:drop-shadow(0 0 14px rgba(138,45,34,0.35));
   animation:yinyangSpin 90s linear infinite;
 }
@@ -242,7 +243,7 @@ img{ -webkit-user-drag:none; user-select:none; }
 .animated-envelope {
   width: 480px;
   height: 240px;
-  background-image: url('document.png'); /* 수정한 파일명 반영 */
+  background-image: url('document.png');
   background-size: 960px 480px;
   background-repeat: no-repeat;
   image-rendering: pixelated;
@@ -506,7 +507,6 @@ img{ -webkit-user-drag:none; user-select:none; }
     desk:    { title: "조직원들이 일하는 어지러운 책상", body: "장부와 전화기, 깨진 찻잔이 널려 있는 책상. 방금 전까지 누군가 다급하게 전화를 돌린 흔적이 남아있다." }
   };
 
-  // 인물 프로필 데이터 — 여기에 내용을 추가/수정하면 됩니다.
   const PROFILES = {
     eiji: {
       img: 'eiji.jpg',
@@ -579,7 +579,6 @@ img{ -webkit-user-drag:none; user-select:none; }
   const orgRestartBtn = document.getElementById('orgRestartBtn');
   const backToOrgBtn  = document.getElementById('backToOrgBtn');
 
-  // 서류 봉투 애니메이션 관련 객체 연결
   const envelopeOverlay  = document.getElementById('envelopeOverlay');
   const animatedEnvelope = document.getElementById('animatedEnvelope');
   let isEnvelopeOpening  = false; 
@@ -614,7 +613,7 @@ img{ -webkit-user-drag:none; user-select:none; }
     const activate = () => {
       spot.classList.add('found');
       if(target === 'doc'){ 
-        startEnvelopeAnimation(); // 바로 넘어가지 않고 봉투 연출 시작
+        startEnvelopeAnimation();
       }
       else { openModal(CLUES[target]); }
     };
@@ -636,7 +635,6 @@ img{ -webkit-user-drag:none; user-select:none; }
   modalOverlay.addEventListener('click', e => { if(e.target === modalOverlay) closeModal(); });
   document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
 
-  // 서류 봉투 4단계 연출 실행 함수
   function startEnvelopeAnimation() {
     if(isEnvelopeOpening) return;
     isEnvelopeOpening = true;
@@ -644,12 +642,10 @@ img{ -webkit-user-drag:none; user-select:none; }
     animatedEnvelope.className = 'animated-envelope step1';
     envelopeOverlay.classList.add('active');
 
-    // 0.4초 간격으로 스프라이트 전환 제어
     setTimeout(() => { animatedEnvelope.className = 'animated-envelope step2'; }, 400); 
     setTimeout(() => { animatedEnvelope.className = 'animated-envelope step3'; }, 800); 
     setTimeout(() => { animatedEnvelope.className = 'animated-envelope step4'; }, 1200); 
 
-    // 연출이 완료된 뒤 조직 개요 화면 노출
     setTimeout(() => {
       envelopeOverlay.classList.remove('active');
       revealOrg();
